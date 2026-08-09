@@ -29,13 +29,15 @@ namespace
         const glm::vec2 aMin = Min(*t1);
         const glm::vec2 aMax = Max(*t1);
 
-        const glm::vec2 bMin = Max(*t2);
-        const glm::vec2 bMax = Min(*t2);
+        const glm::vec2 bMin = Min(*t2);
+        const glm::vec2 bMax = Max(*t2);
 
         if (aMin.x <= bMax.x && aMax.x >= bMin.x && aMin.y <= bMax.y && aMax.y >= bMin.y)
         {
-            e1.GetComponent<CollisionComponent>()->OnCollision(e2);
-            e2.GetComponent<CollisionComponent>()->OnCollision(e1);
+            if (e1.GetComponent<CollisionComponent>()->OnCollision)
+                e1.GetComponent<CollisionComponent>()->OnCollision(e2);
+            if (e2.GetComponent<CollisionComponent>()->OnCollision)
+                e2.GetComponent<CollisionComponent>()->OnCollision(e1);
         }
     }
 }
