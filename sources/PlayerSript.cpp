@@ -26,8 +26,8 @@ Sunset::ReflectionType PlayerSript::Properties()
 void PlayerSript::OnBeginPlay()
 {
     ScriptEntity::OnBeginPlay();
-    GetComponent<Sunset::InputComponent>()->BindAction(Sunset::Key::Up, MoveUp);
-    GetComponent<Sunset::InputComponent>()->BindAction(Sunset::Key::Down, MoveDown);
+    GetComponent<Sunset::InputComponent>()->BindAction(Sunset::Key::W, MoveUp);
+    GetComponent<Sunset::InputComponent>()->BindAction(Sunset::Key::S, MoveDown);
 }
 
 void PlayerSript::OnUpdate(float dt)
