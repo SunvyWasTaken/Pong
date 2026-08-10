@@ -7,6 +7,7 @@
 #include "BallScript.h"
 #include "CollisionComponent.h"
 #include "PlayerSript.h"
+#include "ScoreComponent.h"
 #include "SunsetEngine.h"
 #include "GameFramework/Components/CameraComponent.h"
 #include "GameFramework/Components/InputComponent.h"
@@ -22,15 +23,17 @@ void GameLayer::Init()
     LOG("Engine", info, "Pong Init");
 
     GetWorld()->AddSystem<CollisionSystem>();
+    GetWorld()->AddSystem<ScoreSystem>();
 
     std::shared_ptr<SRmGUI::Panel> panel;
     std::shared_ptr<SRmGUI::Text> TextPlayer;
 
     SRmGUI::SNewAssign(panel)
-        .Fill()
-        .Child(
-            SRmGUI::SNewAssign(TextPlayer)
-            );
+    .Fill()
+    .Child(
+        SRmGUI::SNewAssign(TextPlayer)
+        .Text("Press 'Enter' to start the Game")
+        .Anchors({0.3, 0.f}, {0.5, 0.f}));
 
     AddToViewport(panel);
 
@@ -69,6 +72,8 @@ void GameLayer::Init()
         p.AddComponent<CollisionComponent>();
         p.AddComponent<Sunset::SpriteRenderComponent>();
         p.AddComponent<Sunset::InputComponent>();
+        auto& score = p.AddComponent<ScoreComponent>();
+        panel->AddChild(score.BallScore);
         p.AddComponent<Sunset::NativeScriptComponent>().Bind<BallScript>();
     }
 }

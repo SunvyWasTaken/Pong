@@ -5,6 +5,7 @@
 #include "BallScript.h"
 
 #include "CollisionComponent.h"
+#include "ScoreComponent.h"
 #include "Core/Input.h"
 #include "GameFramework/Components/InputComponent.h"
 #include "GameFramework/Components/TransformComponent.h"
@@ -17,8 +18,13 @@ namespace
     };
 
     bool start = false;
-
     glm::vec2 currVel = glm::vec2(0.0f);
+
+    void Stop()
+    {
+        start = false;
+        currVel = glm::vec2(0.0f);
+    }
 }
 
 void BallScript::OnBeginPlay()
@@ -39,7 +45,22 @@ void BallScript::OnUpdate(float deltaTime)
         if (GetComponent<Sunset::InputComponent>()->IsActionPressed(Enter))
         {
             currVel = glm::vec2(10.f, 0.f);
+            start = true;
         }
 
-    GetComponent<Sunset::TransformComponent>()->AddLocation(glm::vec3(currVel, 0.f) * deltaTime);
+    auto* trans = GetComponent<Sunset::TransformComponent>();
+    trans->AddLocation(glm::vec3(currVel, 0.f) * deltaTime);
+    const glm::vec3 pos = trans->GetLocation();
+    if (pos.x >= 9.f)
+    {
+        Stop();
+        trans->SetLocation({});
+        GetComponent<ScoreComponent>()->p1++;
+    }
+    if (pos.x <= -9.f)
+    {
+        Stop();
+        trans->SetLocation({});
+        GetComponent<ScoreComponent>()->p2++;
+    }
 }
