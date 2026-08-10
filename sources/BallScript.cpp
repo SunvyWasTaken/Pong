@@ -19,6 +19,7 @@ namespace
 
     bool start = false;
     glm::vec2 currVel = glm::vec2(0.0f);
+    bool p1Serve = true;
 
     void Stop()
     {
@@ -42,11 +43,14 @@ void BallScript::OnUpdate(float deltaTime)
 {
     ScriptEntity::OnUpdate(deltaTime);
     if (!start)
+    {
         if (GetComponent<Sunset::InputComponent>()->IsActionPressed(Enter))
         {
-            currVel = glm::vec2(10.f, 0.f);
+            currVel = glm::vec2(10.f, 0.f) * (p1Serve ? 1.f : -1.f);
             start = true;
         }
+        return;
+    }
 
     auto* trans = GetComponent<Sunset::TransformComponent>();
     trans->AddLocation(glm::vec3(currVel, 0.f) * deltaTime);
@@ -56,11 +60,13 @@ void BallScript::OnUpdate(float deltaTime)
         Stop();
         trans->SetLocation({});
         GetComponent<ScoreComponent>()->p1++;
+        p1Serve = false;
     }
     if (pos.x <= -9.f)
     {
         Stop();
         trans->SetLocation({});
         GetComponent<ScoreComponent>()->p2++;
+        p1Serve = true;
     }
 }

@@ -62,6 +62,8 @@ void GameLayer::Init()
         trans.SetScale({0.2f, 1.f, 1.f});
         p.AddComponent<CollisionComponent>();
         p.AddComponent<Sunset::SpriteRenderComponent>();
+        p.AddComponent<Sunset::InputComponent>();
+        p.AddComponent<Sunset::NativeScriptComponent>().Bind<Player2Sript>();
     }
 
     // Ball

@@ -15,3 +15,13 @@ class PlayerSript : public Sunset::ScriptEntity
 
     float Speed = 10.f;
 };
+
+class Player2Sript : public Sunset::ScriptEntity
+{
+public:
+    Sunset::ReflectionType Properties() override;
+    void OnBeginPlay() override;
+    void OnUpdate(float dt) override;
+
+    float Speed = 10.f;
+};
