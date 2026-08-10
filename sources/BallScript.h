@@ -8,6 +8,8 @@
 class BallScript : public Sunset::ScriptEntity
 {
 public:
+    Sunset::ReflectionType Properties() override;
     void OnBeginPlay() override;
     void OnUpdate(float deltaTime) override;
+    float ballSpeed = 10.f;
 };

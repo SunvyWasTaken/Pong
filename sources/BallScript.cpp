@@ -17,6 +17,7 @@ namespace
         Enter
     };
 
+    bool Restart = true;
     bool start = false;
     glm::vec2 currVel = glm::vec2(0.0f);
     bool p1Serve = true;
@@ -28,6 +29,13 @@ namespace
     }
 }
 
+Sunset::ReflectionType BallScript::Properties()
+{
+    Sunset::ReflectionType properties;
+    properties.Field("Ball speed", &BallScript::ballSpeed);
+    return properties;
+}
+
 void BallScript::OnBeginPlay()
 {
     ScriptEntity::OnBeginPlay();
@@ -35,7 +43,14 @@ void BallScript::OnBeginPlay()
 
     GetComponent<CollisionComponent>()->OnCollision = [&](const Sunset::Entity& entity)
     {
-        currVel = -currVel;
+        glm::vec3 targetLoc = entity.GetComponent<Sunset::TransformComponent>()->GetLocation();
+        glm::vec3 loc = GetComponent<Sunset::TransformComponent>()->GetLocation();
+
+        glm::vec3 dir = loc - targetLoc;
+        dir.z = 0.f;
+        dir = glm::normalize(dir);
+
+        currVel = dir * ballSpeed;
     };
 }
 
@@ -46,7 +61,12 @@ void BallScript::OnUpdate(float deltaTime)
     {
         if (GetComponent<Sunset::InputComponent>()->IsActionPressed(Enter))
         {
-            currVel = glm::vec2(10.f, 0.f) * (p1Serve ? 1.f : -1.f);
+            if (Restart)
+            {
+                GetComponent<ScoreComponent>()->Reset();
+                Restart = false;
+            }
+            currVel = glm::vec2(ballSpeed, 0.f) * (p1Serve ? 1.f : -1.f);
             start = true;
         }
         return;
@@ -55,6 +75,14 @@ void BallScript::OnUpdate(float deltaTime)
     auto* trans = GetComponent<Sunset::TransformComponent>();
     trans->AddLocation(glm::vec3(currVel, 0.f) * deltaTime);
     const glm::vec3 pos = trans->GetLocation();
+
+    if (pos.y >= 4.f && currVel.y > 0.f)
+    {
+        currVel.y = -currVel.y;
+    }
+    if (pos.y <= -4.f && currVel.y < 0.f)
+        currVel.y = -currVel.y;
+
     if (pos.x >= 9.f)
     {
         Stop();
@@ -68,5 +96,12 @@ void BallScript::OnUpdate(float deltaTime)
         trans->SetLocation({});
         GetComponent<ScoreComponent>()->p2++;
         p1Serve = true;
+    }
+
+    int winner = 0;
+    if (GetComponent<ScoreComponent>()->hasWinner(winner))
+    {
+        GetComponent<ScoreComponent>()->DisplayWinner(winner);
+        Restart = true;
     }
 }
