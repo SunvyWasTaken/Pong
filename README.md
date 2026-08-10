@@ -11,6 +11,9 @@ Although the course is designed to be followed using [LÖVE2D](https://love2d.or
 The goal was not only to recreate Pong, but also to see how well my engine could handle the fundamental systems required to build a simple game.
 
 ## How to Play
+
+The first at 10 points __WIN__.
+
 |  Player  |      Key       | Function               |
 |:--------:|:--------------:|:-----------------------|
 |          |     ENTER      | Start the Game / Serve |
