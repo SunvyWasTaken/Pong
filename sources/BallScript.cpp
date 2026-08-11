@@ -10,6 +10,8 @@
 #include "GameFramework/Components/InputComponent.h"
 #include "GameFramework/Components/TransformComponent.h"
 
+#include <random>
+
 namespace
 {
     enum Actions : Sunset::InputAction
@@ -21,9 +23,13 @@ namespace
     bool start = false;
     glm::vec2 currVel = glm::vec2(0.0f);
     bool p1Serve = true;
+    int nbrRebond = 0;
+
+    std::ranlux24_base rng{std::random_device{}()};
 
     void Stop()
     {
+        nbrRebond = 0;
         start = false;
         currVel = glm::vec2(0.0f);
     }
@@ -33,13 +39,14 @@ Sunset::ReflectionType BallScript::Properties()
 {
     Sunset::ReflectionType properties;
     properties.Field("Ball speed", &BallScript::ballSpeed);
+    properties.Field("Rebond", [](void* instance){ return &nbrRebond; });
     return properties;
 }
 
 void BallScript::OnBeginPlay()
 {
     ScriptEntity::OnBeginPlay();
-    GetComponent<Sunset::InputComponent>()->BindAction(Sunset::Key::Enter, Enter);
+    GetComponent<Sunset::InputComponent>()->BindAction(Sunset::Key::Space, Enter);
 
     GetComponent<CollisionComponent>()->OnCollision = [&](const Sunset::Entity& entity)
     {
@@ -49,8 +56,10 @@ void BallScript::OnBeginPlay()
         glm::vec3 dir = loc - targetLoc;
         dir.z = 0.f;
         dir = glm::normalize(dir);
-
-        currVel = dir * ballSpeed;
+        ++nbrRebond;
+        if (nbrRebond > 25)
+            nbrRebond = 0;
+        currVel = dir * (ballSpeed + nbrRebond * 0.5f);
     };
 }
 
@@ -61,13 +70,7 @@ void BallScript::OnUpdate(float deltaTime)
     {
         if (GetComponent<Sunset::InputComponent>()->IsActionPressed(Enter))
         {
-            if (Restart)
-            {
-                GetComponent<ScoreComponent>()->Reset();
-                Restart = false;
-            }
-            currVel = glm::vec2(ballSpeed, 0.f) * (p1Serve ? 1.f : -1.f);
-            start = true;
+            StartGame();
         }
         return;
     }
@@ -88,14 +91,16 @@ void BallScript::OnUpdate(float deltaTime)
         Stop();
         trans->SetLocation({});
         GetComponent<ScoreComponent>()->p1++;
-        p1Serve = false;
+        p1Serve = true;
+        StartGame();
     }
     if (pos.x <= -9.f)
     {
         Stop();
         trans->SetLocation({});
         GetComponent<ScoreComponent>()->p2++;
-        p1Serve = true;
+        p1Serve = false;
+        StartGame();
     }
 
     int winner = 0;
@@ -104,4 +109,19 @@ void BallScript::OnUpdate(float deltaTime)
         GetComponent<ScoreComponent>()->DisplayWinner(winner);
         Restart = true;
     }
+}
+
+void BallScript::StartGame()
+{
+    if (Restart)
+    {
+        GetComponent<ScoreComponent>()->Reset();
+        Restart = false;
+    }
+    std::uniform_int_distribution<int> distX(5, 10);
+    std::uniform_int_distribution<int> distY(1, 5);
+    glm::vec2 dir = {distX(rng), distY(rng)};
+    dir = glm::normalize(dir);
+    currVel = dir * ballSpeed * (p1Serve ? 1.f : -1.f);
+    start = true;
 }

@@ -3,8 +3,10 @@
 //
 
 #pragma once
+
 #include "GameFramework/World/ScriptEntity.h"
 
+constexpr float BaseSpeed = 8.f;
 
 class PlayerSript : public Sunset::ScriptEntity
 {
@@ -13,7 +15,9 @@ class PlayerSript : public Sunset::ScriptEntity
     void OnBeginPlay() override;
     void OnUpdate(float dt) override;
 
-    float Speed = 10.f;
+    Sunset::Entity ballEntity;
+
+    float Speed = BaseSpeed;
 };
 
 class Player2Sript : public Sunset::ScriptEntity
@@ -23,5 +27,7 @@ public:
     void OnBeginPlay() override;
     void OnUpdate(float dt) override;
 
-    float Speed = 10.f;
+    Sunset::Entity ballEntity;
+
+    float Speed = BaseSpeed;
 };

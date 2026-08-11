@@ -47,7 +47,7 @@ void GameLayer::Init()
         auto p = GetWorld()->CreateEntity("P1 Entity");
         auto& trans = p.AddComponent<Sunset::TransformComponent>();
         trans.SetLocation({-7.5, 0, 0});
-        trans.SetScale({0.2f, 1.5f, 1.f});
+        trans.SetScale({0.5f, 2.0f, 1.f});
         p.AddComponent<CollisionComponent>();
         p.AddComponent<Sunset::SpriteRenderComponent>();
         p.AddComponent<Sunset::InputComponent>();
@@ -59,7 +59,7 @@ void GameLayer::Init()
         auto p = GetWorld()->CreateEntity("P2 Entity");
         auto& trans = p.AddComponent<Sunset::TransformComponent>();
         trans.SetLocation({7.5, 0, 0});
-        trans.SetScale({0.2f, 1.5f, 1.f});
+        trans.SetScale({0.5f, 2.0f, 1.f});
         p.AddComponent<CollisionComponent>();
         p.AddComponent<Sunset::SpriteRenderComponent>();
         p.AddComponent<Sunset::InputComponent>();

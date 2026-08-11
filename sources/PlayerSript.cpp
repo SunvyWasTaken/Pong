@@ -28,18 +28,35 @@ void PlayerSript::OnBeginPlay()
     ScriptEntity::OnBeginPlay();
     GetComponent<Sunset::InputComponent>()->BindAction(Sunset::Key::W, MoveUp);
     GetComponent<Sunset::InputComponent>()->BindAction(Sunset::Key::S, MoveDown);
+
+    ballEntity = GetWorld()->FindEntityByName("Ball Entity");
 }
 
 void PlayerSript::OnUpdate(float dt)
 {
     ScriptEntity::OnUpdate(dt);
 
-    if (GetComponent<Sunset::TransformComponent>()->GetLocation().y < 4.f)
-        if (GetComponent<Sunset::InputComponent>()->IsActionDown(MoveUp))
-            GetComponent<Sunset::TransformComponent>()->AddLocation(glm::vec3(0.0f, Speed, 0.0f) * dt);
-    if (GetComponent<Sunset::TransformComponent>()->GetLocation().y > -4.f)
-        if (GetComponent<Sunset::InputComponent>()->IsActionDown(MoveDown))
+    // if (GetComponent<Sunset::TransformComponent>()->GetLocation().y < 4.f)
+    //     if (GetComponent<Sunset::InputComponent>()->IsActionDown(MoveUp))
+    //         GetComponent<Sunset::TransformComponent>()->AddLocation(glm::vec3(0.0f, Speed, 0.0f) * dt);
+    // if (GetComponent<Sunset::TransformComponent>()->GetLocation().y > -4.f)
+    //     if (GetComponent<Sunset::InputComponent>()->IsActionDown(MoveDown))
+    //         GetComponent<Sunset::TransformComponent>()->AddLocation(glm::vec3(0.0f, -Speed, 0.0f) * dt);
+
+    if (!ballEntity)
+        return;
+
+    if (const auto* trans = ballEntity.GetComponent<Sunset::TransformComponent>())
+    {
+        const auto& ballLoc = trans->GetLocation();
+        const auto& loc = GetComponent<Sunset::TransformComponent>()->GetLocation();
+
+        const float targetDir = ballLoc.y - loc.y;
+        if (targetDir < 0.f)
             GetComponent<Sunset::TransformComponent>()->AddLocation(glm::vec3(0.0f, -Speed, 0.0f) * dt);
+        else if (targetDir > 0.f)
+            GetComponent<Sunset::TransformComponent>()->AddLocation(glm::vec3(0.0f, Speed, 0.0f) * dt);
+    }
 }
 
 Sunset::ReflectionType Player2Sript::Properties()
@@ -54,16 +71,33 @@ void Player2Sript::OnBeginPlay()
     ScriptEntity::OnBeginPlay();
     GetComponent<Sunset::InputComponent>()->BindAction(Sunset::Key::Up, MoveUp);
     GetComponent<Sunset::InputComponent>()->BindAction(Sunset::Key::Down, MoveDown);
+
+    ballEntity = GetWorld()->FindEntityByName("Ball Entity");
 }
 
 void Player2Sript::OnUpdate(float dt)
 {
     ScriptEntity::OnUpdate(dt);
 
-    if (GetComponent<Sunset::TransformComponent>()->GetLocation().y < 4.f)
-        if (GetComponent<Sunset::InputComponent>()->IsActionDown(MoveUp))
-            GetComponent<Sunset::TransformComponent>()->AddLocation(glm::vec3(0.0f, Speed, 0.0f) * dt);
-    if (GetComponent<Sunset::TransformComponent>()->GetLocation().y > -4.f)
-        if (GetComponent<Sunset::InputComponent>()->IsActionDown(MoveDown))
+    // if (GetComponent<Sunset::TransformComponent>()->GetLocation().y < 4.f)
+    //     if (GetComponent<Sunset::InputComponent>()->IsActionDown(MoveUp))
+    //         GetComponent<Sunset::TransformComponent>()->AddLocation(glm::vec3(0.0f, Speed, 0.0f) * dt);
+    // if (GetComponent<Sunset::TransformComponent>()->GetLocation().y > -4.f)
+    //     if (GetComponent<Sunset::InputComponent>()->IsActionDown(MoveDown))
+    //         GetComponent<Sunset::TransformComponent>()->AddLocation(glm::vec3(0.0f, -Speed, 0.0f) * dt);
+
+    if (!ballEntity)
+        return;
+
+    if (const auto* trans = ballEntity.GetComponent<Sunset::TransformComponent>())
+    {
+        const auto& ballLoc = trans->GetLocation();
+        const auto& loc = GetComponent<Sunset::TransformComponent>()->GetLocation();
+
+        const float targetDir = ballLoc.y - loc.y;
+        if (targetDir < 0.f)
             GetComponent<Sunset::TransformComponent>()->AddLocation(glm::vec3(0.0f, -Speed, 0.0f) * dt);
+        else if (targetDir > 0.f)
+            GetComponent<Sunset::TransformComponent>()->AddLocation(glm::vec3(0.0f, Speed, 0.0f) * dt);
+    }
 }
