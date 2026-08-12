@@ -9,6 +9,7 @@
 #include "PlayerSript.h"
 #include "ScoreComponent.h"
 #include "SunsetEngine.h"
+#include "Audio/AudioSystem.h"
 #include "GameFramework/Components/CameraComponent.h"
 #include "GameFramework/Components/InputComponent.h"
 #include "GameFramework/Components/NativeScriptComponent.h"
@@ -79,4 +80,7 @@ void GameLayer::Init()
         panel->AddChild(score.Winner);
         p.AddComponent<Sunset::NativeScriptComponent>().Bind<BallScript>();
     }
+
+    const auto audio = Sunset::AudioSystem::CreateAudioBuffer(GAME_RESOURCE_PATH "Music.wav");
+    Sunset::AudioSystem::Play2DAudio(audio, false);
 }

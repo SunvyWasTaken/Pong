@@ -10,4 +10,9 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
         Sunset::Runtime
 )
 
+target_compile_definitions(${PROJECT_NAME}
+        PRIVATE
+            GAME_RESOURCE_PATH=\"${CMAKE_CURRENT_SOURCE_DIR}/Resources/\"
+)
+
 set(SUNSET_GAME_TARGET ${PROJECT_NAME} CACHE STRING "Game module loaded by the editor")
