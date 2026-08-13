@@ -81,6 +81,6 @@ void GameLayer::Init()
         p.AddComponent<Sunset::NativeScriptComponent>().Bind<BallScript>();
     }
 
-    const auto audio = Sunset::AudioSystem::CreateAudioBuffer(GAME_RESOURCE_PATH "Music.wav");
+    const auto audio = Sunset::AudioSystem::CreateAudio(GAME_RESOURCE_PATH "Music.wav");
     Sunset::AudioSystem::Play2DAudio(audio, false);
 }
