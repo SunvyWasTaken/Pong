@@ -34,7 +34,8 @@ void GameLayer::Init()
     .Child(
         SRmGUI::SNewAssign(TextPlayer)
         .Text("Press 'Enter' to start the Game")
-        .Anchors({0.3, 0.f}, {0.5, 0.f}));
+        .Anchors({0.5, 0.f}, {1.0, 0.f})
+        .Center({0.1, 0.0}));
 
     AddToViewport(panel);
 
