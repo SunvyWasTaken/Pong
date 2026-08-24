@@ -9,8 +9,7 @@
 #include "Core/Input.h"
 #include "GameFramework/Components/InputComponent.h"
 #include "GameFramework/Components/TransformComponent.h"
-
-#include <random>
+#include "Utility/UtilityFunction.h"
 
 namespace
 {
@@ -24,8 +23,6 @@ namespace
     glm::vec2 currVel = glm::vec2(0.0f);
     bool p1Serve = true;
     int nbrRebond = 0;
-
-    std::ranlux24_base rng{std::random_device{}()};
 
     void Stop()
     {
@@ -118,9 +115,7 @@ void BallScript::StartGame()
         GetComponent<ScoreComponent>()->Reset();
         Restart = false;
     }
-    std::uniform_int_distribution<int> distX(5, 10);
-    std::uniform_int_distribution<int> distY(1, 5);
-    glm::vec2 dir = {distX(rng), distY(rng)};
+    glm::vec2 dir = {Sunset::UtilityFunction::GetRandInRange(5, 10), Sunset::UtilityFunction::GetRandInRange(1, 5)};
     dir = glm::normalize(dir);
     currVel = dir * ballSpeed * (p1Serve ? 1.f : -1.f);
     start = true;
