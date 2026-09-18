@@ -4,12 +4,16 @@
 
 #include "PongModule.h"
 
-#include "GameLayer.h"
-#include "Core/Application.h"
+#include "BallScript.h"
+#include "CollisionComponent.h"
+#include "PlayerSript.h"
+#include "GameFramework/World/ScriptRegistry.h"
 
 void PongModule::Load(Sunset::Application &app)
 {
-    app.PushLayer<GameLayer>();
+    Sunset::ScriptRegistry::Register<BallScript>("BallScript");
+    Sunset::ScriptRegistry::Register<PlayerSript>("PlayerScript");
+    Sunset::ScriptRegistry::Register<Player2Sript>("Player2Script");
 }
 
 void PongModule::Unload()

@@ -38,7 +38,8 @@ void ScoreComponent::DisplayWinner(int winner) const
 
 void ScoreComponent::Reset()
 {
-    Winner->SetVisibility(false);
+    if (Winner)
+        Winner->SetVisibility(false);
     p1 = 0;
     p2 = 0;
 }

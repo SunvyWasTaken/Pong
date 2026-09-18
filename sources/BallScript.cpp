@@ -45,19 +45,19 @@ void BallScript::OnBeginPlay()
     ScriptEntity::OnBeginPlay();
     GetComponent<Sunset::InputComponent>()->BindAction(Sunset::Key::Space, Enter);
 
-    GetComponent<CollisionComponent>()->OnCollision = [&](const Sunset::Entity& entity)
-    {
-        glm::vec3 targetLoc = entity.GetComponent<Sunset::TransformComponent>()->GetLocation();
-        glm::vec3 loc = GetComponent<Sunset::TransformComponent>()->GetLocation();
-
-        glm::vec3 dir = loc - targetLoc;
-        dir.z = 0.f;
-        dir = glm::normalize(dir);
-        ++nbrRebond;
-        if (nbrRebond > 25)
-            nbrRebond = 0;
-        currVel = dir * (ballSpeed + nbrRebond * 0.5f);
-    };
+    // GetComponent<CollisionComponent>()->OnCollision = [&](const Sunset::Entity& entity)
+    // {
+    //     glm::vec3 targetLoc = entity.GetComponent<Sunset::TransformComponent>()->GetLocation();
+    //     glm::vec3 loc = GetComponent<Sunset::TransformComponent>()->GetLocation();
+    //
+    //     glm::vec3 dir = loc - targetLoc;
+    //     dir.z = 0.f;
+    //     dir = glm::normalize(dir);
+    //     ++nbrRebond;
+    //     if (nbrRebond > 25)
+    //         nbrRebond = 0;
+    //     currVel = dir * (ballSpeed + nbrRebond * 0.5f);
+    // };
 }
 
 void BallScript::OnUpdate(float deltaTime)
