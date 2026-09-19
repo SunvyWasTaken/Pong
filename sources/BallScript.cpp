@@ -35,6 +35,7 @@ namespace
 Sunset::ReflectionType BallScript::Properties()
 {
     Sunset::ReflectionType properties;
+    properties.Name = "Ball Script";
     properties.Field("Ball speed", &BallScript::ballSpeed);
     properties.Field("Rebond", [](void* instance){ return &nbrRebond; });
     return properties;
@@ -65,7 +66,8 @@ void BallScript::OnUpdate(float deltaTime)
     ScriptEntity::OnUpdate(deltaTime);
     if (!start)
     {
-        if (GetComponent<Sunset::InputComponent>()->IsActionPressed(Enter))
+        auto* InputComp = GetComponent<Sunset::InputComponent>();
+        if (InputComp->IsActionPressed(Enter))
         {
             StartGame();
         }
@@ -112,7 +114,8 @@ void BallScript::StartGame()
 {
     if (Restart)
     {
-        GetComponent<ScoreComponent>()->Reset();
+        if (auto* Score = GetComponent<ScoreComponent>())
+            Score->Reset();
         Restart = false;
     }
     glm::vec2 dir = {Sunset::UtilityFunction::GetRandInRange(5, 10), Sunset::UtilityFunction::GetRandInRange(1, 5)};
