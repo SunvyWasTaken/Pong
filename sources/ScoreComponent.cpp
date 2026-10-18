@@ -4,21 +4,6 @@
 
 #include "ScoreComponent.h"
 
-#include "GameFramework/World/World.h"
-#include "GameFramework/World/Entity.h"
-
-ScoreComponent::ScoreComponent()
-{
-    SRmGUI::SNewAssign(BallScore)
-    .AnchorMin({0.475, 0.1})
-    .AnchorMax({0.475, 0.1});
-
-    SRmGUI::SNewAssign(Winner)
-    .Fill()
-    .AnchorMin({0.5f, 0.5})
-    .AnchorMax({0.5f, 0.5});
-    Winner->SetVisibility(false);
-}
 
 bool ScoreComponent::hasWinner(int& winner) const
 {
@@ -32,22 +17,11 @@ bool ScoreComponent::hasWinner(int& winner) const
 
 void ScoreComponent::DisplayWinner(int winner) const
 {
-    Winner->SetText(std::format("Player {} WIN", winner));
-    Winner->SetVisibility(true);
+    LOG("Engine", info, "Player {} WIN", winner)
 }
 
 void ScoreComponent::Reset()
 {
-    if (Winner)
-        Winner->SetVisibility(false);
     p1 = 0;
     p2 = 0;
-}
-
-void ScoreSystem::Update(float deltaTime)
-{
-    m_World->Each<ScoreComponent>([&](const Sunset::Entity& entity, const ScoreComponent& score)
-    {
-        score.BallScore->SetText(std::format("{} | {}", score.p1, score.p2));
-    });
 }
